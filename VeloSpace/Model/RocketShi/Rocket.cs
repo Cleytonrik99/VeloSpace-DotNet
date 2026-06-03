@@ -25,8 +25,8 @@ public class Rocket
     public int CapacityWidth { get; set; }
     
     [Required]
-    [Column("CAPACITY_DEPTH", TypeName = "numeric(5)")]
-    public int CapacityDepth { get; set; }
+    [Column("CAPACITY_LENGTH", TypeName = "numeric(5)")]
+    public int CapacityLength { get; set; }
     
     [Required]
     [Column("CAPACITY_WEIGHT", TypeName = "numeric(5)")]

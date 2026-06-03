@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using VeloSpace.Model.User;
 
 namespace VeloSpace.Model.Launch;
 
 [Table("LAUNCH_PROVIDER")]
-[Index(nameof(Email), IsUnique = true)]
 [Index(nameof(Cnpj), IsUnique = true)]
 public class LaunchProvider
 {
@@ -25,16 +25,9 @@ public class LaunchProvider
     public string Cnpj { get; set; }
     
     [Required]
-    [Column("PHONE", TypeName = "numeric(15)")]
-    public int Phone { get; set; }
+    [Column("USER_ACCOUNT_ID")]
+    public long UserAccountId { get; set; }
     
-    [Required]
-    [Column("PASSWORD_HASH")]
-    [StringLength(255)]
-    public string PasswordHash { get; set; }
-    
-    [Required]
-    [Column("EMAIL")]
-    [StringLength(255)]
-    public string Email { get; set; }
+    [ForeignKey(nameof(UserAccountId))]
+    public UserAccount UserAccount { get; set; }
 }

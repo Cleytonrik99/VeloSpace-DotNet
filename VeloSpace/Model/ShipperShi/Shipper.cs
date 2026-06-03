@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using VeloSpace.Model.User;
 
 namespace VeloSpace.Model.ShipperShi;
 
 [Table("SHIPPER")]
-[Index(nameof(DocumentShipper), IsUnique = true)]
-[Index(nameof(Email), IsUnique = true)]
+[Index(nameof(ShipperDocument), IsUnique = true)]
 public class Shipper
 {
     [Key]
@@ -20,26 +20,19 @@ public class Shipper
     public string Name { get; set; }
     
     [Required]
-    [Column("DOCUMENT_SHIPPER")]
+    [Column("SHIPPER_DOCUMENT")]
     [StringLength(15)]
-    public string DocumentShipper { get; set; }
-    
-    [Required]
-    [Column("EMAIL")]
-    [StringLength(255)]
-    public string Email { get; set; }
-    
-    [Required]
-    [Column("PHONE", TypeName = "numeric(15)")]
-    public int Phone { get; set; }
-    
-    [Required]
-    [Column("PASSWORD_HASH")]
-    [StringLength(255)]
-    public string PasswordHash { get; set; }
+    public string ShipperDocument { get; set; }
     
     [Required]
     [Column("TYPE")]
     [StringLength(2)]
     public string Type { get; set; }
+    
+    [Required]
+    [Column("USER_ACCOUNT_ID")]
+    public long UserAccountId { get; set; }
+    
+    [ForeignKey(nameof(UserAccountId))]
+    public UserAccount UserAccount { get; set; }
 }
