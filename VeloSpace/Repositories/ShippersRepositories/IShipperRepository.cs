@@ -1,22 +1,28 @@
 ﻿using VeloSpace.DTOs.Shippers;
+using VeloSpace.Model.ShipperShi;
 
 namespace VeloSpace.Repositories.ShippersRepositories;
 
 public interface IShipperRepository
 {
     
-    Task<IEnumerable<ShipperRequestDTO>> GetAllAsync();
+    Task<IEnumerable<Shipper>> GetAllAsync();
     
-    Task<ShipperRequestDTO> GetByIdAsync(long id);
+    Task<Shipper> GetByIdAsync(long id);
     
-    Task AddAsync(ShipperRequestDTO shipperRequestDto);
+    Task AddAsync(Shipper shipper);
     
-    Task UpdateAsync(ShipperRequestDTO shipperRequestDto);
+    Task UpdateAsync(Shipper shipper);
     
     Task DeleteAsync(long id);
     
-    Task<(IEnumerable<Model.ShipperShi.Shipper> Items, int TotalItems)> SearchAsync(
-        
+    Task<(IEnumerable<Shipper> Items, int TotalItems)> SearchAsync(
+        string? name,
+        string? type,
+        int page,
+        int pageSize,
+        string sortBy,
+        string sortDir
     );
 
 }
