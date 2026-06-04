@@ -1,4 +1,5 @@
-﻿using VeloSpace.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using VeloSpace.Context;
 using VeloSpace.Model.User;
 
 namespace VeloSpace.Repositories.UsersRepositories;
@@ -12,28 +13,32 @@ public class UserAccountRepository : IUserAccountRepository
         _context = context;
     }
 
-    public Task<IEnumerable<UserAccount>> GetAllAsync()
+    public async Task<IEnumerable<UserAccount>> GetAllAsync()
     {
-        
+        return await _context.UserAccount.ToListAsync();
     }
 
-    public Task<UserAccount> GetByIdAsync(long id)
+    public async Task<UserAccount> GetByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        return await _context.UserAccount.FindAsync(id);
     }
 
-    public Task AddAsync(UserAccount userAccount)
+    public async Task AddAsync(UserAccount userAccount)
     {
-        throw new NotImplementedException();
+        _context.UserAccount.Add(userAccount);
+        await _context.SaveChangesAsync();
     }
 
-    public Task UpdateAsync(UserAccount userAccount)
+    public async Task UpdateAsync(UserAccount userAccount)
     {
-        throw new NotImplementedException();
+        _context.UserAccount.Update(userAccount);
+        await _context.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(long id)
+    public async Task DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        var search = await GetByIdAsync(id);
+        _context.UserAccount.Remove(search);
+        await _context.SaveChangesAsync();
     }
 }
