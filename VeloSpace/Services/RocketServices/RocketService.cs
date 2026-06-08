@@ -22,6 +22,11 @@ public class RocketService : IRocketService
     {
         public NotFoundException(string message) : base(message) {} // status code 404
     }
+    
+    public class ConflictException : Exception
+    {
+        public ConflictException(string message) : base(message) {} // status code 409
+    }
 
     public async Task<IEnumerable<RocketDTO>> GetAllAsync()
     {
@@ -72,6 +77,10 @@ public class RocketService : IRocketService
             RocketId = rocketDto.RocketId,
             RocketStatusId = rocketDto.RocketStatusId
         };
+
+        var nameRocket = await _context.Rocket.FirstOrDefaultAsync(r => r.Name == rocketDto.Name);
+
+        if (nameRocket != null) throw new ConflictException("Name of rocket already registered in database");
         
         var rocketStatusExists = await _context.RocketStatus
             .CountAsync(rs => rs.RocketStatusId == rocketDto.RocketStatusId) > 0;

@@ -141,6 +141,10 @@ public class RocketController : ControllerBase
 
             return Created("", new { message = "Rocket added successfully" });
         }
+        catch (RocketService.ConflictException ex)
+        {
+            return Conflict(ex.Message);
+        }
         catch (ArgumentNullException ex)
         {
             return BadRequest(ex.Message);
