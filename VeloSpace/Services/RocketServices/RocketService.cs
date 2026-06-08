@@ -1,4 +1,5 @@
-﻿using VeloSpace.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using VeloSpace.Context;
 using VeloSpace.DTOs.Page;
 using VeloSpace.DTOs.RocketDTOS;
 using VeloSpace.Model.RocketShi;
@@ -34,7 +35,6 @@ public class RocketService : IRocketService
             CapacityWidth = rocket.CapacityWidth,
             LaunchDate = rocket.LaunchDate,
             Name = rocket.Name,
-            RocketId = rocket.RocketId,
             RocketStatusId = rocket.RocketStatusId
         }).ToList();
     }
@@ -71,24 +71,49 @@ public class RocketService : IRocketService
             RocketId = rocketDto.RocketId,
             RocketStatusId = rocketDto.RocketStatusId
         };
+        
+        var statusExists = await _context.RocketStatus
+            .AnyAsync(s => s.RocketStatusId == rocketDto.RocketStatusId);
+
+        if (!statusExists)
+            throw new ArgumentException("Rocket Status Id does not exist");
 
         await _rocketRepository.AddAsync(newRocket);
     }
 
     public async Task UpdateAsync(long id, RocketDTO rocketDto)
     {
-        if (string.IsNullOrWhiteSpace(rocketDto.Name)) throw new ArgumentException("Name can't be null");
+        if (string.IsNullOrWhiteSpace(rocketDto.Name))
+            throw new ArgumentException("Name can't be null");
 
-        if (rocketDto.CapacityHeight == 0) throw new ArgumentException("Capacity Height can't be null");
-        if (rocketDto.CapacityWidth == 0) throw new ArgumentException("Capacity Width can't be null");
-        if (rocketDto.CapacityLength == 0) throw new ArgumentException("Capacity Length can't be null");
-        if (rocketDto.CapacityWeight == 0) throw new ArgumentException("Capacity Weight can't be null");
-        
-        if (rocketDto.RocketStatusId == 0) throw new ArgumentException("Rocket Status Id can't be null");
+        if (rocketDto.CapacityHeight <= 0)
+            throw new ArgumentException("Capacity Height must be greater than zero");
+
+        if (rocketDto.CapacityWidth <= 0)
+            throw new ArgumentException("Capacity Width must be greater than zero");
+
+        if (rocketDto.CapacityLength <= 0)
+            throw new ArgumentException("Capacity Length must be greater than zero");
+
+        if (rocketDto.CapacityWeight <= 0)
+            throw new ArgumentException("Capacity Weight must be greater than zero");
+
+        if (rocketDto.RocketStatusId <= 0)
+            throw new ArgumentException("Rocket Status Id can't be null");
 
         var existingRocket = await _rocketRepository.GetByIdAsync(id);
-        
-        if (existingRocket == null) throw new NotFoundException($"Rocket with id {id} not found");
+
+        if (existingRocket == null)
+            throw new NotFoundException($"Rocket with id {id} not found");
+
+        existingRocket.Name = rocketDto.Name;
+        existingRocket.CapacityHeight = rocketDto.CapacityHeight;
+        existingRocket.CapacityWidth = rocketDto.CapacityWidth;
+        existingRocket.CapacityLength = rocketDto.CapacityLength;
+        existingRocket.CapacityWeight = rocketDto.CapacityWeight;
+        existingRocket.RocketStatusId = rocketDto.RocketStatusId;
+
+        await _rocketRepository.UpdateAsync(existingRocket);
     }
 
     public async Task DeleteAsync(long id)

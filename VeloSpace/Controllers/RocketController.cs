@@ -82,7 +82,7 @@ public class RocketController : ControllerBase
         }
         catch (ArgumentNullException ex)
         {
-            return BadRequest(new {message = "Missing informations in the request body"});
+            return BadRequest(ex.Message);
         }
         catch (Exception ex)
         {
@@ -141,7 +141,7 @@ public class RocketController : ControllerBase
         }
         catch (RocketService.NotFoundException ex)
         {
-            return NotFound(new { message = $"Rocket with id {id} not found" });
+            return NotFound(ex.Message);
         }
         catch (Exception ex)
         {

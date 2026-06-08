@@ -66,15 +66,22 @@ public class LaunchProvidersService : ILaunchProvidersService
     public async Task<LaunchProviderRequestDTO> GetByIdAsync(long id)
     {
         var launchProviderResearch = await _launchProvidersRepository.GetByIdAsync(id);
-        var userResearch = await _userAccountRepository.GetByIdAsync(launchProviderResearch.UserAccountId);
 
         if (launchProviderResearch == null)
         {
-            throw new NotFoundException($"Shipper with id {id} Not Found.");
+            throw new NotFoundException($"Launch Provider with id {id} not found.");
+        }
+
+        var userResearch = await _userAccountRepository.GetByIdAsync(launchProviderResearch.UserAccountId);
+
+        if (userResearch == null)
+        {
+            throw new NotFoundException($"User account linked to Launch Provider with id {id} not found.");
         }
 
         var launchProviderNewDto = new LaunchProviderDTO
         {
+            LaunchProviderId = launchProviderResearch.LaunchProviderId,
             Cnpj = launchProviderResearch.Cnpj,
             CorporateName = launchProviderResearch.CorporateName,
             UserAccountId = launchProviderResearch.UserAccountId
@@ -104,6 +111,12 @@ public class LaunchProvidersService : ILaunchProvidersService
         var searchUserEmail = await _context.UserAccount.FirstOrDefaultAsync(u => u.Email == userNewDTO.Email);
         
         if (searchUserEmail != null) throw new ConflictException("Email already registered");
+        
+        var searchCnpj = await _context.LaunchProvider
+            .FirstOrDefaultAsync(lp => lp.Cnpj == launchProviderNewDTO.Cnpj);
+
+        if (searchCnpj != null)
+            throw new ConflictException("CNPJ already registered");
         
         var newUser = new UserAccount
         {

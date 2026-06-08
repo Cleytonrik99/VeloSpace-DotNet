@@ -88,7 +88,7 @@ public class LaunchProviderController : ControllerBase
         }
         catch (ArgumentNullException ex)
         {
-            return BadRequest(new {message = "Missing informations in the request body"});
+            return BadRequest(ex.Message);
         }
         catch (Exception ex)
         {
@@ -147,7 +147,7 @@ public class LaunchProviderController : ControllerBase
         }
         catch (LaunchProvidersService.NotFoundException ex)
         {
-            return NotFound(new { message = $"Launch Provider with id {id} not found" });
+            return NotFound(ex.Message);
         }
         catch (Exception ex)
         {

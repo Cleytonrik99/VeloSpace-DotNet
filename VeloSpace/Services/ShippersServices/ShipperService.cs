@@ -68,11 +68,17 @@ public class ShipperService : IShipperService
     public async Task<ShipperRequestDTO> GetByIdAsync(long id)
     {
         var shipperResearch = await _shipperRepository.GetByIdAsync(id);
-        var userResearch = await _userAccountRepository.GetByIdAsync(shipperResearch.UserAccountId);
 
         if (shipperResearch == null)
         {
-            throw new NotFoundException($"Shipper with id {id} Not Found.");
+            throw new NotFoundException($"Shipper with id {id} not found.");
+        }
+
+        var userResearch = await _userAccountRepository.GetByIdAsync(shipperResearch.UserAccountId);
+
+        if (userResearch == null)
+        {
+            throw new NotFoundException($"User account linked to shipper with id {id} not found.");
         }
 
         var shipperNewDto = new ShipperDTO
@@ -91,7 +97,7 @@ public class ShipperService : IShipperService
             UserAccountId = userResearch.UserAccountId,
             UserRoleId = userResearch.UserRoleId
         };
-        
+
         return new ShipperRequestDTO
         {
             ShipperDto = shipperNewDto,
@@ -102,32 +108,63 @@ public class ShipperService : IShipperService
     public async Task AddAsync(ShipperRequestDTO shipperRequestDto)
     {
         var shipperNewDTO = shipperRequestDto.ShipperDto;
-
         var userNewDTO = shipperRequestDto.UserAccountDto;
 
-        var searchUserEmail = await _context.UserAccount.FirstOrDefaultAsync(u => u.Email == userNewDTO.Email);
+        var searchUserEmail = await _context.UserAccount
+            .FirstOrDefaultAsync(u => u.Email == userNewDTO.Email);
 
-        if (searchUserEmail != null) throw new ConflictException("Email already registered");
+        if (searchUserEmail != null)
+            throw new ConflictException("Email already registered");
 
-        var newUser = new UserAccount
+        var searchDocument = await _context.Shipper
+            .FirstOrDefaultAsync(s => s.ShipperDocument == shipperNewDTO.ShipperDocument);
+
+        if (searchDocument != null)
+            throw new ConflictException("Shipper document already registered");
+
+        if (string.IsNullOrWhiteSpace(shipperNewDTO.Name))
+            throw new ArgumentException("Name can't be null");
+
+        if (string.IsNullOrWhiteSpace(shipperNewDTO.Type))
+            throw new ArgumentException("Type can't be null");
+
+        if (shipperNewDTO.Type.Length > 2)
+            throw new ArgumentException("Type must have at most 2 characters");
+
+        if (string.IsNullOrWhiteSpace(shipperNewDTO.ShipperDocument))
+            throw new ArgumentException("Shipper document can't be null");
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
         {
-            Email = userNewDTO.Email,
-            HashedPassword = BCrypt.Net.BCrypt.HashPassword(shipperRequestDto.UserAccountDto.HashedPassword),
-            Phone = userNewDTO.Phone,
-            UserRoleId = userNewDTO.UserRoleId
-        };
+            var newUser = new UserAccount
+            {
+                Email = userNewDTO.Email,
+                HashedPassword = BCrypt.Net.BCrypt.HashPassword(userNewDTO.HashedPassword),
+                Phone = userNewDTO.Phone,
+                UserRoleId = userNewDTO.UserRoleId
+            };
 
-        await _userAccountRepository.AddAsync(newUser);
+            await _userAccountRepository.AddAsync(newUser);
 
-        var newShipper = new Shipper
+            var newShipper = new Shipper
+            {
+                Name = shipperNewDTO.Name,
+                ShipperDocument = shipperNewDTO.ShipperDocument,
+                Type = shipperNewDTO.Type,
+                UserAccountId = newUser.UserAccountId
+            };
+
+            await _shipperRepository.AddAsync(newShipper);
+
+            await transaction.CommitAsync();
+        }
+        catch
         {
-            Name = shipperNewDTO.Name,
-            ShipperDocument = shipperNewDTO.ShipperDocument,
-            Type = shipperNewDTO.Type,
-            UserAccountId = newUser.UserAccountId
-        };
-
-        await _shipperRepository.AddAsync(newShipper);
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     public async Task UpdateAsync(long id, ShipperDTO shipperDto)
@@ -136,6 +173,9 @@ public class ShipperService : IShipperService
 
         if (string.IsNullOrWhiteSpace(shipperDto.Type)) throw new ArgumentException("Type can't be null");
 
+        if (shipperDto.Type.Length > 2)
+            throw new ArgumentException("Type must have at most 2 characters");
+        
         if (string.IsNullOrWhiteSpace(shipperDto.ShipperDocument)) throw new ArgumentException("Shipper Document can't be null");
         
         var existingShipper = await _shipperRepository.GetByIdAsync(id);

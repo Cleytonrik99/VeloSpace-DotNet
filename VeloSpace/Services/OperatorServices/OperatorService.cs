@@ -3,7 +3,6 @@ using VeloSpace.Context;
 using VeloSpace.DTOs;
 using VeloSpace.DTOs.OperatorDTOS;
 using VeloSpace.DTOs.Page;
-using VeloSpace.DTOs.Shippers;
 using VeloSpace.Model.OperatorShi;
 using VeloSpace.Model.User;
 using VeloSpace.Repositories.OperatorsRepositories;
@@ -70,9 +69,14 @@ public class OperatorService : IOperatorService
     public async Task<OperatorRequestDTO> GetByIdAsync(long id)
     {
         var operatorResearch = await _operatorRepository.GetByIdAsync(id);
+
+        if (operatorResearch == null)
+            throw new NotFoundException($"Operator with id {id} not found");
+
         var userResearch = await _userAccountRepository.GetByIdAsync(operatorResearch.UserAccountId);
 
-        if (operatorResearch == null) throw new NotFoundException($"Operator with id {id} not found");
+        if (userResearch == null)
+            throw new NotFoundException($"User account linked to operator with id {id} not found");
 
         var operatorNewDto = new OperatorDTO
         {
@@ -80,9 +84,9 @@ public class OperatorService : IOperatorService
             Cpf = operatorResearch.Cpf,
             LaunchProviderId = operatorResearch.LaunchProviderId,
             OperatorId = operatorResearch.OperatorId,
-            OperatorStatusId = operatorResearch.OperatorStatusId,
+            OperatorStatusId = operatorResearch.OperatorStatusId
         };
-        
+
         var userNewDto = new UserAccountDTO
         {
             Email = userResearch.Email,
@@ -101,30 +105,49 @@ public class OperatorService : IOperatorService
     public async Task AddAsync(OperatorRequestDTO operatorRequestDto)
     {
         var operatorNewDTO = operatorRequestDto.OperatorDto;
-        
         var userNewDTO = operatorRequestDto.UserAccountDto;
-        
-        var searchUserEmail = await _context.UserAccount.FirstOrDefaultAsync(u => u.Email == userNewDTO.Email);
 
-        if (searchUserEmail != null) throw new ConflictException("Email already registered");
+        var searchUserEmail = await _context.UserAccount
+            .FirstOrDefaultAsync(u => u.Email == userNewDTO.Email);
+
+        if (searchUserEmail != null)
+            throw new ConflictException("Email already registered");
+
+        var searchCpf = await _context.Operator
+            .FirstOrDefaultAsync(o => o.Cpf == operatorNewDTO.Cpf);
+
+        if (searchCpf != null)
+            throw new ConflictException("CPF already registered");
         
+        var launchProviderExists = await _context.LaunchProvider
+            .AnyAsync(lp => lp.LaunchProviderId == operatorNewDTO.LaunchProviderId);
+
+        if (!launchProviderExists)
+            throw new NotFoundException("Launch Provider not found");
+
+        var statusExists = await _context.OperatorStatus
+            .AnyAsync(os => os.OperatorStatusId == operatorNewDTO.OperatorStatusId);
+
+        if (!statusExists)
+            throw new NotFoundException("Operator Status not found");
+
         var newUser = new UserAccount
         {
             Email = userNewDTO.Email,
-            HashedPassword = BCrypt.Net.BCrypt.HashPassword(operatorRequestDto.UserAccountDto.HashedPassword),
+            HashedPassword = BCrypt.Net.BCrypt.HashPassword(userNewDTO.HashedPassword),
             Phone = userNewDTO.Phone,
             UserRoleId = userNewDTO.UserRoleId
         };
-        
+
         await _userAccountRepository.AddAsync(newUser);
-        
+
         var operatorNew = new Operator
         {
             Name = operatorNewDTO.Name,
             Cpf = operatorNewDTO.Cpf,
             LaunchProviderId = operatorNewDTO.LaunchProviderId,
-            OperatorId = operatorNewDTO.OperatorId,
             OperatorStatusId = operatorNewDTO.OperatorStatusId,
+            UserAccountId = newUser.UserAccountId
         };
 
         await _operatorRepository.AddAsync(operatorNew);

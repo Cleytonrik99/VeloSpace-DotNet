@@ -88,7 +88,7 @@ public class OperatorController : ControllerBase
         }
         catch (ArgumentNullException ex)
         {
-            return BadRequest(new {message = "Missing informations in the request body"});
+            return BadRequest(ex.Message);
         }
         catch (Exception ex)
         {
@@ -147,7 +147,7 @@ public class OperatorController : ControllerBase
         }
         catch (OperatorService.NotFoundException ex)
         {
-            return NotFound(new { message = $"Operator with id {id} not found" });
+            return NotFound(ex.Message);
         }
         catch (Exception ex)
         {
