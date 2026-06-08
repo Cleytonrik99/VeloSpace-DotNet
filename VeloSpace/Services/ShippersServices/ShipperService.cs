@@ -33,9 +33,36 @@ public class ShipperService : IShipperService
         public ConflictException(string message) : base(message) {} // status code 409
     }
 
-    public Task<IEnumerable<ShipperRequestDTO>> GetAllAsync()
+    public async Task<IEnumerable<ShipperRequestDTO>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var getShippers = await _shipperRepository.GetAllAsync();
+        var getUsers = await _userAccountRepository.GetAllAsync();
+
+        var result = getShippers.Join(
+            getUsers,
+            shipper => shipper.UserAccountId,
+            user => user.UserAccountId,
+            (shipper, user) => new ShipperRequestDTO
+            {
+                ShipperDto = new ShipperDTO
+                {
+                    ShipperId = shipper.ShipperId,
+                    Name = shipper.Name,
+                    ShipperDocument = shipper.ShipperDocument,
+                    Type = shipper.Type
+                },
+
+                UserAccountDto = new UserAccountDTO
+                {
+                    UserAccountId = user.UserAccountId,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    UserRoleId = user.UserRoleId
+                }
+            }
+        ).ToList();
+
+        return result;
     }
 
     public async Task<ShipperRequestDTO> GetByIdAsync(long id)
@@ -43,7 +70,7 @@ public class ShipperService : IShipperService
         var shipperResearch = await _shipperRepository.GetByIdAsync(id);
         var userResearch = await _userAccountRepository.GetByIdAsync(shipperResearch.UserAccountId);
 
-        if (shipperResearch == null!)
+        if (shipperResearch == null)
         {
             throw new NotFoundException($"Shipper with id {id} Not Found.");
         }
@@ -105,6 +132,12 @@ public class ShipperService : IShipperService
 
     public async Task UpdateAsync(long id, ShipperDTO shipperDto)
     {
+        if (string.IsNullOrWhiteSpace(shipperDto.Name)) throw new ArgumentException("Name can't be null");
+
+        if (string.IsNullOrWhiteSpace(shipperDto.Type)) throw new ArgumentException("Type can't be null");
+
+        if (string.IsNullOrWhiteSpace(shipperDto.ShipperDocument)) throw new ArgumentException("Shipper Document can't be null");
+        
         var existingShipper = await _shipperRepository.GetByIdAsync(id);
 
         if (existingShipper == null) throw new NotFoundException($"Shipper with id {id} not found");

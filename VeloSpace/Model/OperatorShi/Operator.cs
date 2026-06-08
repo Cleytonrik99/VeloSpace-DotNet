@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using VeloSpace.Model.Launch;
 using VeloSpace.Model.PayloadShi;
+using VeloSpace.Model.User;
 
 namespace VeloSpace.Model.OperatorShi;
 
@@ -37,4 +38,11 @@ public class Operator
     
     [ForeignKey(nameof(LaunchProviderId))]
     public LaunchProvider LaunchProvider { get; set; }
-}
+    
+    [Required]
+    [Column("USER_ACCOUNT_ID")]
+    public long UserAccountId { get; set; }
+    
+    [ForeignKey(nameof(UserAccountId))]
+    public UserAccount UserAccount { get; set; }
+}    
