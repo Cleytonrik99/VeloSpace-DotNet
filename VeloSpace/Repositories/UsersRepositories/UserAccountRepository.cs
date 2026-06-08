@@ -13,6 +13,11 @@ public class UserAccountRepository : IUserAccountRepository
         _context = context;
     }
 
+    public async Task<UserAccount> GetByEmailAsync(string email)
+    {
+        return await _context.UserAccount.FirstOrDefaultAsync(u => u.Email == email);
+    }
+
     public async Task<IEnumerable<UserAccount>> GetAllAsync()
     {
         return await _context.UserAccount.ToListAsync();

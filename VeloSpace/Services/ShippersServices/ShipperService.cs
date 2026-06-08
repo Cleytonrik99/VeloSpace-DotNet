@@ -112,7 +112,7 @@ public class ShipperService : IShipperService
         var newUser = new UserAccount
         {
             Email = userNewDTO.Email,
-            HashedPassword = userNewDTO.HashedPassword,
+            HashedPassword = BCrypt.Net.BCrypt.HashPassword(shipperRequestDto.UserAccountDto.HashedPassword),
             Phone = userNewDTO.Phone,
             UserRoleId = userNewDTO.UserRoleId
         };

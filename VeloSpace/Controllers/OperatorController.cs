@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VeloSpace.DTOs.OperatorDTOS;
 using VeloSpace.Services.OperatorServices;
@@ -7,6 +8,7 @@ namespace VeloSpace.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class OperatorController : ControllerBase
 {
     private readonly IOperatorService _operatorService;
@@ -18,6 +20,7 @@ public class OperatorController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAll()
     {
@@ -40,6 +43,7 @@ public class OperatorController : ControllerBase
     [HttpGet("{id:long}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetById(long id)
     {
@@ -63,10 +67,12 @@ public class OperatorController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> AddOperator([FromBody] OperatorRequestDTO operatorRequestDto)
     {
@@ -98,6 +104,7 @@ public class OperatorController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateOperator(long id, [FromBody] OperatorDTO operatorDto)
     {
@@ -128,6 +135,7 @@ public class OperatorController : ControllerBase
     [HttpDelete("{id:long}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteOperator(long id)
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VeloSpace.DTOs.RocketDTOS;
 using VeloSpace.Services.RocketServices;
@@ -7,6 +8,7 @@ namespace VeloSpace.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class RocketController : ControllerBase
 {
     private readonly IRocketService _rocketService;
@@ -18,6 +20,7 @@ public class RocketController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAll()
     {
@@ -40,6 +43,7 @@ public class RocketController : ControllerBase
     [HttpGet("{id:long}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetById(long id)
     {
@@ -66,6 +70,7 @@ public class RocketController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> AddRocket([FromBody] RocketDTO rocketDto)
     {
@@ -93,6 +98,7 @@ public class RocketController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateRocket(long id, [FromBody] RocketDTO rocketDto)
     {
@@ -123,6 +129,7 @@ public class RocketController : ControllerBase
     [HttpDelete("{id:long}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteRocket(long id)
     {

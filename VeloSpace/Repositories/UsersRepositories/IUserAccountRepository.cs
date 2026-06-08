@@ -4,6 +4,7 @@ namespace VeloSpace.Repositories.UsersRepositories;
 
 public interface IUserAccountRepository
 {
+    Task<UserAccount> GetByEmailAsync(string email);
     Task<IEnumerable<UserAccount>> GetAllAsync();
 
     Task<UserAccount> GetByIdAsync(long id);

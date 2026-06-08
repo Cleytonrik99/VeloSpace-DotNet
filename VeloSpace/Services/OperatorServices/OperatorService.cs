@@ -111,7 +111,7 @@ public class OperatorService : IOperatorService
         var newUser = new UserAccount
         {
             Email = userNewDTO.Email,
-            HashedPassword = userNewDTO.HashedPassword,
+            HashedPassword = BCrypt.Net.BCrypt.HashPassword(operatorRequestDto.UserAccountDto.HashedPassword),
             Phone = userNewDTO.Phone,
             UserRoleId = userNewDTO.UserRoleId
         };
