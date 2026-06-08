@@ -29,6 +29,7 @@ public class RocketService : IRocketService
 
         return getRockets.Select(rocket => new RocketDTO
         {
+            RocketId = rocket.RocketId,
             CapacityHeight = rocket.CapacityHeight,
             CapacityLength = rocket.CapacityLength,
             CapacityWeight = rocket.CapacityWeight,
