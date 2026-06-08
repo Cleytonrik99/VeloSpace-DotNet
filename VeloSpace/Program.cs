@@ -18,6 +18,7 @@ using VeloSpace.Repositories.RocketRepositories;
 using VeloSpace.Repositories.SatellitesRepositories;
 using VeloSpace.Repositories.ShippersRepositories;
 using VeloSpace.Repositories.UsersRepositories;
+using VeloSpace.Services.Auth;
 using VeloSpace.Services.LaunchProvidersServices;
 using VeloSpace.Services.OperatorServices;
 using VeloSpace.Services.RocketServices;
@@ -148,6 +149,8 @@ builder.Services.AddScoped<IUserAccountRepository, UserAccountRepository>();
 // ===============
 // Authentication
 // ===============
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -239,3 +242,5 @@ app.UseCors("AllowAll");
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

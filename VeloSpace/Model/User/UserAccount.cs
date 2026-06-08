@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace VeloSpace.Model.User;
 
-[Table("USER_ACCOUNT")]
+[Table("VS_USER_ACCOUNT")]
 [Index(nameof(Email), IsUnique = true)]
 public class UserAccount
 {

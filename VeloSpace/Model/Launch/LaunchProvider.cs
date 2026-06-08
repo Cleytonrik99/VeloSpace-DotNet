@@ -5,7 +5,7 @@ using VeloSpace.Model.User;
 
 namespace VeloSpace.Model.Launch;
 
-[Table("LAUNCH_PROVIDER")]
+[Table("VS_LAUNCH_PROVIDER")]
 [Index(nameof(Cnpj), IsUnique = true)]
 public class LaunchProvider
 {

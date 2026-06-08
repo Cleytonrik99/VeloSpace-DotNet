@@ -119,7 +119,7 @@ public class LaunchProvidersService : ILaunchProvidersService
         {
             Cnpj = launchProviderNewDTO.Cnpj,
             CorporateName = launchProviderNewDTO.CorporateName,
-            UserAccountId = launchProviderNewDTO.UserAccountId
+            UserAccountId = newUser.UserAccountId
         };
 
         await _launchProvidersRepository.AddAsync(newLaunchProvider);
