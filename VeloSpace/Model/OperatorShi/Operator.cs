@@ -7,7 +7,7 @@ using VeloSpace.Model.User;
 
 namespace VeloSpace.Model.OperatorShi;
 
-[Table("OPERATOR")]
+[Table("VS_OPERATOR")]
 [Index(nameof(Cpf), IsUnique = true)]
 public class Operator
 {

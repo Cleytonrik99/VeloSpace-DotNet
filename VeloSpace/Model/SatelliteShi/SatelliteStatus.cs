@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace VeloSpace.Model.SatelliteShi;
 
-[Table("SATELLITE_STATUS")]
+[Table("VS_SATELLITE_STATUS")]
 [Index(nameof(Code), IsUnique = true)]
 public class SatelliteStatus
 {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace VeloSpace.Model.RocketShi;
 
-[Table("ROCKET_STATUS")]
+[Table("VS_ROCKET_STATUS")]
 [Index(nameof(Code), IsUnique = true)]
 public class RocketStatus
 {

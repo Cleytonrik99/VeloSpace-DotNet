@@ -6,7 +6,7 @@ using VeloSpace.Model.SatelliteShi;
 
 namespace VeloSpace.Model.InspectionShi;
 
-[Table("INSPECTION")]
+[Table("VS_INSPECTION")]
 public class Inspection
 {
     [Key]

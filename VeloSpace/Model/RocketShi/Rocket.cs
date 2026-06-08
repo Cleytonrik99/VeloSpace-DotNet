@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VeloSpace.Model.RocketShi;
 
-[Table("ROCKET")]
+[Table("VS_ROCKET")]
 public class Rocket
 {
     [Key]
-    [Column("ROCKET")]
+    [Column("VS_ROCKET")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long RocketId { get; set; }
     

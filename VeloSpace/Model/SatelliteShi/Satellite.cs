@@ -7,7 +7,7 @@ using VeloSpace.Model.ShipperShi;
 
 namespace VeloSpace.Model.SatelliteShi;
 
-[Table("SATELLITE")]
+[Table("VS_SATELLITE")]
 public class Satellite
 {
     [Key]

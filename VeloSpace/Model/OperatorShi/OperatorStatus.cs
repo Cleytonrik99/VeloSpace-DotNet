@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace VeloSpace.Model.PayloadShi;
 
-[Table("OPERATOR_STATUS")]
+[Table("VS_OPERATOR_STATUS")]
 [Index(nameof(Code), IsUnique = true)]
 public class OperatorStatus
 {

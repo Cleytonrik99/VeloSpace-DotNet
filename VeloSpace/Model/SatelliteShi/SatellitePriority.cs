@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace VeloSpace.Model.SatelliteShi;
 
-[Table("PAYLOAD_PRIORITY")]
+[Table("VS_SATELLITE_PRIORITY")]
 [Index(nameof(Level), IsUnique = true)]
 public class SatellitePriority
 {
     [Key]
-    [Column("PAYLOAD_PRIORITY_ID")]
+    [Column("SATELLITE_PRIORITY_ID")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public long PayloadPriorityId { get; set; }
+    public long SatellitePriorityId { get; set; }
     
     [Required]
     [Column("DESCRIPTION")]

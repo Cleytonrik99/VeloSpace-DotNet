@@ -5,7 +5,7 @@ using VeloSpace.Model.User;
 
 namespace VeloSpace.Model.ShipperShi;
 
-[Table("SHIPPER")]
+[Table("VS_SHIPPER")]
 [Index(nameof(ShipperDocument), IsUnique = true)]
 public class Shipper
 {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace VeloSpace.Model.User;
 
-[Table("USER_ROLE")]
+[Table("VS_USER_ROLE")]
 [Index(nameof(Code), IsUnique = true)]
 public class UserRole
 {
