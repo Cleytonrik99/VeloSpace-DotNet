@@ -72,11 +72,13 @@ public class RocketService : IRocketService
             RocketStatusId = rocketDto.RocketStatusId
         };
         
-        var statusExists = await _context.RocketStatus
-            .AnyAsync(s => s.RocketStatusId == rocketDto.RocketStatusId);
-
-        if (!statusExists)
-            throw new ArgumentException("Rocket Status Id does not exist");
+        var rocketStatusExists = await _context.RocketStatus
+            .CountAsync(rs => rs.RocketStatusId == rocketDto.RocketStatusId) > 0;
+        
+        if (!rocketStatusExists)
+        {
+            throw new NotFoundException("Rocket Status not found.");
+        }
 
         await _rocketRepository.AddAsync(newRocket);
     }

@@ -7,7 +7,7 @@ namespace VeloSpace.Model.RocketShi;
 public class Rocket
 {
     [Key]
-    [Column("VS_ROCKET")]
+    [Column("ROCKET_ID")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long RocketId { get; set; }
     
