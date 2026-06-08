@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace VeloSpace.Model.RocketShi;
 
 [Table("VS_ROCKET")]
+[Index(nameof(Name), IsUnique = true)]
 public class Rocket
 {
     [Key]
