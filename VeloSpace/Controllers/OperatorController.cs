@@ -117,7 +117,7 @@ public class OperatorController : ControllerBase
     /// {
     ///     "operatorDto": {
     ///         "name": "Carlos Operador",
-    ///         "cpf": 12345678910,
+    ///         "cpf": "12345678910",
     ///         "operatorStatusId": 1,
     ///         "launchProviderId": 1
     ///     },
@@ -191,7 +191,7 @@ public class OperatorController : ControllerBase
     /// <code>
     /// {
     ///     "name": "Carlos Operador Atualizado",
-    ///     "cpf": 12345678910,
+    ///     "cpf": "12345678910",
     ///     "operatorStatusId": 1,
     ///     "launchProviderId": 1
     /// }
