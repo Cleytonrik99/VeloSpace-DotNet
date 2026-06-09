@@ -1,4 +1,4 @@
-![Logo VeloSpace](images/logo.png)
+![Logo VeloSpace](images/logo.jpeg)
 
 # VeloSpace: Plataforma de Gestão e Validação de CubeSats
 
@@ -83,11 +83,11 @@ VeloSpace
 
 | Nome | Função no Projeto | LinkedIn | GitHub |
 |---|---|---|---|
-| Integrante 1 | Função | [LinkedIn](#) | [GitHub](#) |
-| Integrante 2 | Função | [LinkedIn](#) | [GitHub](#) |
-| Integrante 3 | Função | [LinkedIn](#) | [GitHub](#) |
-| Integrante 4 | Função | [LinkedIn](#) | [GitHub](#) |
-| Integrante 5 | Função | [LinkedIn](#) | [GitHub](#) |
+| Cleyton Enrike de Oliveira | Desenvolvedor .NET & IOT & DBA | [LinkedIn](https://www.linkedin.com/in/cleyton-enrike-de-oliveira99) | [@Cleytonrik99](https://github.com/Cleytonrik99) |
+| Matheus Henrique Nascimento de Freitas | Desenvolvedor Mobile & DBA | [LinkedIn](https://www.linkedin.com/in/matheus-henrique-freitas) | [@MatheusHenriqueNF](https://github.com/MatheusHenriqueNF) |
+| Pedro Henrique Sena | Desenvolvedor Java & DevOps | [LinkedIn](https://www.linkedin.com/in/pedro-henrique-sena) | [@devpedrosena1](https://github.com/devpedrosena1) |
+| Paulo Sérgio França Barbosa | Desenvolvedor Java & DevOps & DBA | [LinkedIn](https://www.linkedin.com/in/paulosergiofb/) | [@PauloSergioFIAP](https://github.com/PauloSergioFIAP) |
+| Enzo Ribeiro Vilela de Azevedo | Quality Assurance | [LinkedIn](https://www.linkedin.com/in/enzo-de-azevedo/) | [@enzorva](https://github.com/enzorva) |
 
 ---
 
@@ -172,7 +172,7 @@ O VeloSpace será desenvolvido como uma solução para gestão de oportunidades 
 
 > Por padrão, a API roda localmente em **http://localhost:5000**
 
-> Link de deploy: **INSERIR_LINK_DO_DEPLOY_AQUI**
+> Link de deploy: **https://csharp-rm560442.azurewebsites.net/swagger/index.html**
 
 ---
 
@@ -601,10 +601,15 @@ Os logs são exibidos no terminal e também podem ser gravados em arquivo dentro
 ## 🗃️ Diagrama de Entidade-Relacionamento (DER)
 
 <div align="center">
-  <img src="images/der.png" alt="Diagrama DER VeloSpace" style="max-width: 90%; border: 1px solid #ddd; border-radius: 4px;">
+  <img src="images/Logical.png" alt="Diagrama DER VeloSpace" style="max-width: 90%; border: 1px solid #ddd; border-radius: 4px;">
 </div>
 
 ---
+
+## Diagrama de Arquitetura
+<div align="center">
+  <img src="images/Diagramadearquitetura.drawio.png" alt="Diagrama DER VeloSpace" style="max-width: 90%; border: 1px solid #ddd; border-radius: 4px;">
+</div>
 
 ## 🐳 Docker
 
