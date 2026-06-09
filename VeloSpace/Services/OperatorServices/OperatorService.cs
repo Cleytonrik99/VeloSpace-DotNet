@@ -120,16 +120,22 @@ public class OperatorService : IOperatorService
             throw new ConflictException("CPF already registered");
         
         var launchProviderExists = await _context.LaunchProvider
-            .AnyAsync(lp => lp.LaunchProviderId == operatorNewDTO.LaunchProviderId);
+            .Where(lp => lp.LaunchProviderId == operatorNewDTO.LaunchProviderId)
+            .CountAsync() > 0;
 
         if (!launchProviderExists)
-            throw new NotFoundException("Launch Provider not found");
+        {
+            throw new NotFoundException("Launch provider not found.");
+        }
 
-        var statusExists = await _context.OperatorStatus
-            .AnyAsync(os => os.OperatorStatusId == operatorNewDTO.OperatorStatusId);
+        var operatorStatusExists = await _context.OperatorStatus
+            .Where(os => os.OperatorStatusId == operatorNewDTO.OperatorStatusId)
+            .CountAsync() > 0;
 
-        if (!statusExists)
-            throw new NotFoundException("Operator Status not found");
+        if (!operatorStatusExists)
+        {
+            throw new NotFoundException("Operator Status not found.");
+        }
 
         var newUser = new UserAccount
         {
