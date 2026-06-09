@@ -27,7 +27,7 @@ namespace VeloSpace.Services.Auth
             var user = await _userAccountRepository.GetByEmailAsync(loginRequest.Email);
 
             if (user == null)
-                throw new Exception("Usuário não encontrado.");
+                throw new UnauthorizedAccessException("User or Password invalid");
 
             var senhaValida = BCrypt.Net.BCrypt.Verify(
                 loginRequest.HashedPassword,
@@ -35,7 +35,7 @@ namespace VeloSpace.Services.Auth
             );
 
             if (!senhaValida)
-                throw new Exception("Senha inválida.");
+                throw new UnauthorizedAccessException("User or Password invalid");
 
             var token = GenerateJwtToken(user);
 

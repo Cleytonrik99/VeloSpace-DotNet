@@ -44,10 +44,25 @@ public class SatelliteService : ISatelliteService
         };
     }
 
+    public async Task<SatellitePriorityDTO> GetPriorityByIdAsync(long id)
+    {
+        var search = await _satelliteRepository.GetPriorityByIdAsync(id);
+        
+        if (search == null) throw new NotFoundException($"Satellite Status with id {id} not found");
+
+        return new SatellitePriorityDTO
+        {
+            SatellitePriorityId = search.SatellitePriorityId,
+            Description = search.Description,
+            Level = search.Level
+        };
+    }
+
     public async Task<List<long>> SatelliteAllocation(long rocketId, List<long> satellitesIdList)
     {
         // função de calcular
         // transformar peso e volume numa coisa só : densidade
+        // volume = width x length
         // densidade = P/V
         // D = P/V = xKg/m^2
 
@@ -55,17 +70,36 @@ public class SatelliteService : ISatelliteService
         var rocket = await _rocketService.GetByIdAsync(rocketId);
 
         // calcular capacidade do foguete como densidade
-        var volumeRocket = rocket.CapacityHeight + rocket.CapacityLength + rocket.CapacityWidth;
-        
-        var capacityDensityRocket = volumeRocket asdasdasd
+        var baseAreaRocket = rocket.CapacityWidth * rocket.CapacityLength;
 
-        throw new NotImplementedException();
+        var volumeRocket = baseAreaRocket * rocket.CapacityHeight;
 
-        // salvar isso numa variável?
+        var rocketCapacityDensity = rocket.CapacityWeight / volumeRocket;
 
 
         // receber uma lista de ids de satellites
         // dar get em cada um
+        // adicionar cada um num dicionario?
+        // chave é o Id do satellite
+        // valor é uma lista com densidade e prioridade
+
+        Dictionary<long, List<int>> satDensityPriority = new Dictionary<long, List<int>>();
+
+        foreach (var sat in satellitesIdList)
+        {
+            var satellite = await GetByIdAsync(sat);
+
+            var satellitePriority = await GetPriorityByIdAsync(satellite.SatelliteStatusId);
+
+            var baseAreaSatellite = satellite.Width * satellite.Length;
+
+            var volumeSatellite = baseAreaSatellite * satellite.Height;
+
+            var satelliteDensity = satellite.Weight / volumeSatellite;
+            
+            satDensityPriority.Add(sat, new List<int>{satelliteDensity, satellitePriority.Level});
+        }
+        
         // calcular primeiro os satellites de maior prioridade
         // calcular densidade de cada um 
         // variável 1 = densidade

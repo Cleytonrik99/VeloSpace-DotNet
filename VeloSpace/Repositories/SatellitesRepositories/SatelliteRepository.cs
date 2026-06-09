@@ -16,4 +16,9 @@ public class SatelliteRepository : ISatelliteRepository
     {
         return await _context.Satellite.FindAsync(id);
     }
+
+    public async Task<SatellitePriority> GetPriorityByIdAsync(long id)
+    {
+        return await _context.SatellitePriority.FindAsync(id);
+    }
 }
