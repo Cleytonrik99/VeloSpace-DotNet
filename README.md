@@ -362,7 +362,7 @@ O Operator representa o operador responsável por executar atividades ligadas ao
 {
   "operatorDto": {
     "name": "Carlos Operador",
-    "cpf": 123456789,
+    "cpf": "12345678901",
     "operatorStatusId": 1,
     "launchProviderId": 1
   },
@@ -380,7 +380,7 @@ O Operator representa o operador responsável por executar atividades ligadas ao
 ```json
 {
   "name": "Carlos Operador Atualizado",
-  "cpf": 123456789,
+  "cpf": "12345678901",
   "operatorStatusId": 1,
   "launchProviderId": 1
 }
@@ -389,13 +389,13 @@ O Operator representa o operador responsável por executar atividades ligadas ao
 ### Exemplos de busca
 
 ```http
-GET http://localhost:5000/api/Operator/search?name=Carlos&cpf=123456789&operatorStatusId=1&launchProviderId=1&page=1&pageSize=10&sortBy=operatorId&sortDir=asc
+GET http://localhost:5000/api/Operator/search?name=Carlos&cpf=12345678901&operatorStatusId=1&launchProviderId=1&page=1&pageSize=10&sortBy=operatorId&sortDir=asc
 ```
 
 Parâmetros suportados:
 
 - `name` *(string, opcional)* — filtra pelo nome do operador;
-- `cpf` *(int, opcional)* — filtra pelo CPF;
+- `cpf` *(string, opcional)* — filtra pelo CPF do operador;
 - `operatorStatusId` *(long, opcional)*;
 - `launchProviderId` *(long, opcional)*;
 - `page` *(int, padrão: 1)*;
@@ -403,7 +403,7 @@ Parâmetros suportados:
 - `sortBy` *(string, padrão: operatorId)*;
 - `sortDir` *(string, padrão: asc)*.
 
-> Observação: no DTO atual, o CPF está como `int`. Caso seja necessário armazenar CPF completo com 11 dígitos, recomenda-se alterar para `long` ou `string`.
+> Observação: o CPF é tratado como `string` para preservar os 11 dígitos e evitar perda de zeros à esquerda.
 
 ---
 
@@ -611,6 +611,8 @@ Os logs são exibidos no terminal e também podem ser gravados em arquivo dentro
   <img src="images/Diagramadearquitetura.drawio.png" alt="Diagrama DER VeloSpace" style="max-width: 90%; border: 1px solid #ddd; border-radius: 4px;">
 </div>
 
+---
+
 ## 🐳 Docker
 
 A solução possui suporte para execução via Docker.
@@ -781,6 +783,27 @@ Exemplo:
 Login_WhenCredentialsAreValid_ShouldReturnOk
 GetById_WhenRocketDoesNotExist_ShouldReturnNotFound
 AddShipper_WhenEmailAlreadyExists_ShouldReturnConflict
+```
+
+### Exemplo de teste automatizado
+
+```csharp
+[Fact]
+public async Task GetById_WhenRocketDoesNotExist_ShouldReturnNotFound()
+{
+    // Arrange
+    var rocketId = 999L;
+
+    _rocketServiceMock
+        .Setup(service => service.GetByIdAsync(rocketId))
+        .ThrowsAsync(new RocketService.NotFoundException($"Rocket with id {rocketId} not found"));
+
+    // Act
+    var result = await _rocketController.GetById(rocketId);
+
+    // Assert
+    result.Should().BeOfType<NotFoundObjectResult>();
+}
 ```
 
 ---
