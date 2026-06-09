@@ -98,6 +98,8 @@ public class SatelliteService : ISatelliteService
             var satelliteDensity = satellite.Weight / volumeSatellite;
             
             satDensityPriority.Add(sat, new List<int>{satelliteDensity, satellitePriority.Level});
+
+            
         }
         
         // calcular primeiro os satellites de maior prioridade
@@ -105,6 +107,8 @@ public class SatelliteService : ISatelliteService
         // variável 1 = densidade
         // variável 2 = prioridade
         // problema da mochila
+        
+        throw new NotImplementedException();
 
     }
 }
