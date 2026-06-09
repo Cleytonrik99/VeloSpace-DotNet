@@ -42,13 +42,13 @@ public class OperatorRepository : IOperatorRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<(IEnumerable<Operator> Items, int TotalItems)> SearchAsync(string? name, int? cpf, long? operatorStatusId, long? launchProviderId, int page, int pageSize, string sortBy, string sortDir)
+    public async Task<(IEnumerable<Operator> Items, int TotalItems)> SearchAsync(string? name, string? cpf, long? operatorStatusId, long? launchProviderId, int page, int pageSize, string sortBy, string sortDir)
     {
         var query = _context.Operator.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(name)) query = query.Where(o => o.Name == name);
 
-        if (cpf.HasValue) query = query.Where(o => o.Cpf == cpf);
+        if (!string.IsNullOrWhiteSpace(cpf)) query = query.Where(o => o.Cpf == cpf);
 
         if (operatorStatusId.HasValue) query = query.Where(o => o.OperatorStatusId == operatorStatusId);
 

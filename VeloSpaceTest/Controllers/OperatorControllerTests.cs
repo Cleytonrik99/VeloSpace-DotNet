@@ -32,7 +32,7 @@ public class OperatorControllerTests
             {
                 OperatorId = operatorId,
                 Name = "Carlos Operador",
-                Cpf = 123456789,
+                Cpf = "123456789",
                 OperatorStatusId = 1,
                 LaunchProviderId = 1,
                 UserAccountId = 1
@@ -86,7 +86,7 @@ public class OperatorControllerTests
             OperatorDto = new OperatorDTO
             {
                 Name = "Carlos Operador",
-                Cpf = 123456789,
+                Cpf = "123456789",
                 OperatorStatusId = 1,
                 LaunchProviderId = 1
             },

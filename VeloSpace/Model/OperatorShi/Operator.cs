@@ -22,8 +22,9 @@ public class Operator
     public string Name { get; set; }
     
     [Required]
-    [Column("CPF", TypeName = "numeric(11)")]
-    public int Cpf { get; set; }
+    [Column("CPF")]
+    [StringLength(11)]
+    public string Cpf { get; set; }
     
     [Required]
     [Column("OPERATOR_STATUS_ID")]

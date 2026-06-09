@@ -313,7 +313,7 @@ public class OperatorController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> SearchOperator(
         [FromQuery] string? name,
-        [FromQuery] int? cpf,
+        [FromQuery] string? cpf,
         [FromQuery] long? operatorStatusId,
         [FromQuery] long? launchProviderId,
         [FromQuery] int page = 1,

@@ -16,7 +16,7 @@ public interface IOperatorRepository
 
     Task<(IEnumerable<Operator> Items, int TotalItems)> SearchAsync(
         string? name,
-        int? cpf,
+        string? cpf,
         long? operatorStatusId,
         long? launchProviderId,
         int page,

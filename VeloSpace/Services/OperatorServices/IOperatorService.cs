@@ -12,7 +12,7 @@ public interface IOperatorService
     Task DeleteAsync(long id);
     Task<PagedResult<OperatorDTO>> SearchAsync(
         string? name,
-        int? cpf,
+        string? cpf,
         long? operatorStatusId,
         long? launchProviderId,
         int page,

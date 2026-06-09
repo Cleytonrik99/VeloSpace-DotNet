@@ -157,7 +157,8 @@ public class OperatorService : IOperatorService
     {
         if (string.IsNullOrWhiteSpace(operatorDto.Name)) throw new ArgumentException("Name can't be null");
         
-        if (operatorDto.Cpf == 0) throw new ArgumentException("Cpf can't be null");
+        if (string.IsNullOrWhiteSpace(operatorDto.Cpf))
+            throw new ArgumentException("Cpf can't be null");
         
         if (operatorDto.OperatorStatusId == 0) throw new ArgumentException("Operator Status Id can't be null");
         
@@ -190,7 +191,7 @@ public class OperatorService : IOperatorService
         if (searchUser != null) await _userAccountRepository.DeleteAsync(searchUser.UserAccountId);
     }
 
-    public async Task<PagedResult<OperatorDTO>> SearchAsync(string? name, int? cpf, long? operatorStatusId, long? launchProviderId, int page, int pageSize, string sortBy, string sortDir)
+    public async Task<PagedResult<OperatorDTO>> SearchAsync(string? name, string? cpf, long? operatorStatusId, long? launchProviderId, int page, int pageSize, string sortBy, string sortDir)
     {
         if (page < 1) page = 1;
         if (pageSize < 1) pageSize = 10;
