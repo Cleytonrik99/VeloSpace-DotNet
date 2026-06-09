@@ -5,4 +5,6 @@ namespace VeloSpace.Services.SatellitesServices;
 public interface ISatelliteService
 {
     Task<SatelliteDTO> GetByIdAsync(long id);
+
+    Task<List<long>> SatelliteAllocation(long rocketId, List<long> satellitesIdList);
 }
