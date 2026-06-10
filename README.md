@@ -176,6 +176,12 @@ O VeloSpace será desenvolvido como uma solução para gestão de oportunidades 
 
 ---
 
+# Link do Video da Solução Completa
+
+> Link: **https://youtu.be/2qwEt3dtRS8**
+
+---
+
 ## 🔐 Auth — `/api/Auth`
 
 | Método | Endpoint | Descrição | Corpo da Requisição | Resposta Esperada |
